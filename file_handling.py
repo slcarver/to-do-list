@@ -1,13 +1,18 @@
 import json
 
-try:
-    with open ("to-do.json", mode="r") as file:
-        existing_data = json.load(file)
-except FileNotFoundError:
-    existing_data = {}
 
 
-with open ("to-do.json", mode="w", encoding="utf-8") as write_file:
-    json.dump(existing_data, write_file, indent=4)
+def open_file():
+    try:
+        with open ("to-do.json", "a") as file:
+           existing_data = json.load(file)
+           print(existing_data)
 
-    
+    # except FileNotFoundError:
+    #     return type(dict(existing_data))
+        
+    except json.JSONDecodeError:
+        print("Error: Could not decode JSON from the file. Check if it's valid JSON.")
+        
+
+

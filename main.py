@@ -1,21 +1,36 @@
 import json
+import os
+import pprint
+from collections import defaultdict
 from logic import *
-from file_handling import *
 
 
-#global variables
-task_to_do_list = []
 
+
+if not os.path.exists("to-do-list.json") or os.path.getsize("to-do-list.json") == 0:
+    data = []
+else: 
+    with open("to-do-list.json", "r") as file:
+        data = json.load(file)
+        if isinstance(data, dict):
+            data = [data]
+
+print(data)
 print("This is a to do list to manage your work related tasks ")
-task = input(str("Please type in a task that needs to be completed: \n"))
+task = str(input("Please type in a task that needs to be completed: \n"))
+priority = prio_logic()
 
-task_to_do_list.append(task)
-task_priority = prio_logic()
-json_dict_updater(existing_data, task_to_do_list)
+print(f"task: {task}")
+#logic to read key and update json data
+for item in data:
+    if priority in item:
+        item[priority].append(task)
+        break
 
-existing_data[task_priority] = task_to_do_list
+else:
+    data.append({priority: [task]})
+   
+print(data)   
 
-
-
-
-    
+with open ("to-do-list.json", "w") as file:
+    json.dump(data, file, indent = 4)
